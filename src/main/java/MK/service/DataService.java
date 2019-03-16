@@ -15,7 +15,7 @@ public class DataService {
     private CustomerRepositoryImpl customerRepository = new CustomerRepositoryImpl();
     private ProductRepositoryImpl productRepository = new ProductRepositoryImpl();
 
-    public void showwTheMostExpensiveProduct() {
+    public void showTheMostExpensiveProduct() {
         Map<Category, Product> mapCategoryProduct = productRepository.findAll()
                 .stream()
                 .collect(Collectors.toMap(p->p.getCategory(), c->c));
