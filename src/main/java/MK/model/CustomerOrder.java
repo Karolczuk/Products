@@ -24,9 +24,6 @@ public class CustomerOrder {
     private double discount;
     private int quantity;
     private LocalDate date;
-    //private BigInteger paymentId;
-
-
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "payment_id")

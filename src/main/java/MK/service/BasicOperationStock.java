@@ -126,6 +126,7 @@ public class BasicOperationStock {
                     .orElse(null);
         }
 
+
         if (product == null) {
             product = productRepository
                     .findByNameCategoryProducer(productDto.getName(), product.getCategory().getName(), productDto.getProducerDto().getName())

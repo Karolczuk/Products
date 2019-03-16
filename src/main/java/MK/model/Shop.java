@@ -17,9 +17,8 @@ public class Shop {
     @GeneratedValue
     private Long id;
     private String name;
-   // private BigInteger countryId;
 
-    @ManyToOne(cascade = CascadeType.PERSIST) // zachowuje sie jak trazakcyjnosc
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "country_id")
     private Country country;
 

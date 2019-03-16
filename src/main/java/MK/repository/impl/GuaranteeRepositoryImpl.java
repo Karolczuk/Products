@@ -3,7 +3,6 @@ package MK.repository.impl;
 import MK.exceptions.ExceptionCode;
 import MK.exceptions.MyException;
 import MK.model.EGuarantee;
-import MK.model.GuaranteeComponents;
 import MK.repository.generic.AbstractGenericRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;

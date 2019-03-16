@@ -4,9 +4,7 @@ import MK.dto.GuaranteeComponentsDto;
 import MK.exceptions.ExceptionCode;
 import MK.exceptions.MyException;
 import MK.mappers.ModelMappers;
-import MK.model.GuaranteeComponents;
 import MK.repository.impl.GuaranteeRepository;
-import MK.repository.impl.ProducerRepository;
 import MK.repository.impl.ProductRepository;
 import MK.validator.ManagmentProductsValidator;
 
