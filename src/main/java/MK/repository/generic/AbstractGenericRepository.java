@@ -16,11 +16,7 @@ import java.util.Optional;
 public abstract class AbstractGenericRepository<T> implements GenericRepository<T> {
 
     protected final EntityManagerFactory emf = DbConnection.getInstance().getSessionFactory();
-  //  EntityManager em = emf.createEntityManager();
 
-    // type przechowa w runtime informacje jaki konkretnie typ zostal
-    // podstawiony za T, czyli w runtime pod type moze np siedziec info takie
-    // jak mk.model.Card albo mk.model.Position
     private final Class<T> type
             = (Class<T>) ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
@@ -39,12 +35,10 @@ public abstract class AbstractGenericRepository<T> implements GenericRepository<
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            item = (T)em.merge(t); // merge kiedy dajesz obiekt t bez id
-            // pozwoli go wstawic jako nowy obiekt a kiedy dajesz z id to go aktualizuje
+            item = (T)em.merge(t);
             tx.commit();
         } catch (Exception e) {
-            e.printStackTrace();
-          //  throw new MyException(ExceptionCode.CUSTOMER, e.getMessage());
+            throw new MyException(ExceptionCode.CUSTOMER, e.getMessage());
         } finally {
             if (em != null) {
                 em.close();
