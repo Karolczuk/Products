@@ -14,8 +14,6 @@ public class DbConnection {
         return ourInstance;
     }
 
-    //final private SessionFactory sessionFactory
-           // = new Configuration().configure().buildSessionFactory();
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("MANAGEMENT_PRODUCTS");
 

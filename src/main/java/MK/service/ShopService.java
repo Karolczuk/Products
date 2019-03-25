@@ -2,32 +2,38 @@ package MK.service;
 
 import MK.dto.CountryDto;
 import MK.dto.ShopDto;
-import MK.dto.StockDto;
 import MK.exceptions.ExceptionCode;
 import MK.exceptions.MyException;
 import MK.mappers.ModelMappers;
 import MK.model.*;
 import MK.repository.impl.CountryRepository;
 import MK.repository.impl.ShopRepository;
-import MK.repository.impl.StockRepository;
-import MK.validator.ManagmentProductsValidator;
+import MK.validator.impl.model.CountryModelValidator;
+import MK.validator.impl.model.ShopModelValidator;
+import MK.validator.impl.persistence.ShopPersistenceValidator;
 
-public class BasicOperationShop {
+public class ShopService {
 
     private final ShopRepository shopRepository;
     private final CountryRepository countryRepository;
-    private final ManagmentProductsValidator managmentProductsValidator;
+    private final ShopModelValidator shopModelValidator;
+    private final ShopPersistenceValidator shopPersistenceValidator;
+    private final CountryModelValidator countryModelValidator;
     private final ModelMappers modelMapper;
 
 
-    public BasicOperationShop(
+    public ShopService(
             ShopRepository shopRepository,
             CountryRepository countryRepository,
-            ManagmentProductsValidator managmentProductsValidator,
-            ModelMappers modelMapper) {
+            ModelMappers modelMapper,
+            ShopModelValidator shopModelValidator,
+            ShopPersistenceValidator shopPersistenceValidator,
+            CountryModelValidator countryModelValidator) {
         this.shopRepository = shopRepository;
         this.countryRepository = countryRepository;
-        this.managmentProductsValidator = managmentProductsValidator;
+        this.shopModelValidator = shopModelValidator;
+        this.shopPersistenceValidator = shopPersistenceValidator;
+        this.countryModelValidator = countryModelValidator;
         this.modelMapper = modelMapper;
     }
 
@@ -38,14 +44,13 @@ public class BasicOperationShop {
             throw new MyException(ExceptionCode.SHOP, "SHOP OBJECT IS NULL");
         }
 
-        if (!managmentProductsValidator.validateShopFields(shopDto)) {
+        if (!shopModelValidator.validateShopFields(shopDto)) {
             throw new MyException(ExceptionCode.SHOP, "SHOP FIELDS ARE NOT VALID");
         }
 
-        if (managmentProductsValidator.validateShopInsideDB(shopDto)) {
+        if (shopPersistenceValidator.validateShopInsideDB(shopDto)) {
             throw new MyException(ExceptionCode.SHOP, "SHOP ALREADY EXISTS");
         }
-
 
 
         // -----------------------------------------------------------------------------------
@@ -62,14 +67,9 @@ public class BasicOperationShop {
             throw new MyException(ExceptionCode.COUNTRY, "COUNTRY WITHOUT ID AND NAME");
         }
 
-        if (!managmentProductsValidator.validateCountryFields(countryDto)) {
+        if (!countryModelValidator.validateCountryFields(countryDto)) {
             throw new MyException(ExceptionCode.COUNTRY, "COUNTRY FIELDS ARE NOT VALID");
         }
-
-        if (!managmentProductsValidator.validateCountryInsideDB(countryDto)) {
-            throw new MyException(ExceptionCode.COUNTRY, "COUNTRY NOT FOUND");
-        }
-
 
         // -----------------------------------------------------------------------------------
         // ----------------------------------- INSERT INTO DB --------------------------------

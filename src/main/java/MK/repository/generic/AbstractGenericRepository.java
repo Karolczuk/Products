@@ -2,10 +2,6 @@ package MK.repository.generic;
 
 import MK.exceptions.ExceptionCode;
 import MK.exceptions.MyException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -60,7 +56,6 @@ public abstract class AbstractGenericRepository<T> implements GenericRepository<
             tx = session.getTransaction();
             tx.begin();
             T item =session.getReference(type,id);
-           // T item = session.get(type, id);
             session.remove(item);
             tx.commit();
         } catch (Exception e) {
@@ -74,9 +69,7 @@ public abstract class AbstractGenericRepository<T> implements GenericRepository<
 
     @Override
     public void deleteAll() {
-        //Session session = null;
         EntityManager em = null;
-        //Transaction tx = null;
         EntityTransaction tx = null;
         try {
             em = emf.createEntityManager();
@@ -104,9 +97,7 @@ public abstract class AbstractGenericRepository<T> implements GenericRepository<
     @Override
     public Optional<T> findOne(Long id) {
         Optional<T> item = Optional.empty();
-        //Session session = null;
         EntityManager em = null;
-        //Transaction tx = null;
         EntityTransaction tx = null;
         try {
             if (id == null) {

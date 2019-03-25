@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface ProducerRepository extends GenericRepository<Producer> {
     Optional<Producer> findByNameTradeCountry(String name, String tradeName, String countryName);
-
 }

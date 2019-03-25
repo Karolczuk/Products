@@ -6,32 +6,49 @@ import MK.exceptions.MyException;
 import MK.mappers.ModelMappers;
 import MK.model.*;
 import MK.repository.impl.*;
-import MK.validator.ManagmentProductsValidator;
+import MK.validator.impl.model.CustomerModelValidator;
+import MK.validator.impl.model.CustomerOrderModelValidator;
+import MK.validator.impl.model.ProductModelValidator;
+import MK.validator.impl.persistence.CustomerOrderPersistenceValidator;
+import MK.validator.impl.persistence.CustomerPersistenceValidator;
+import MK.validator.impl.persistence.ProductPersistenceValidator;
 
-public class BasicOperationCustomerOrder {
+public class CustomerOrderService {
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
     private final ProducerRepository producerRepository;
-    private final PaymentRepository paymentRepository;
-    private final ManagmentProductsValidator managmentProductsValidator;
+    private final CustomerModelValidator customerModelValidator;
+    private final CustomerPersistenceValidator customerPersistenceValidator;
+    private final CustomerOrderModelValidator customerOrderModelValidator;
+    private final CustomerOrderPersistenceValidator customerOrderPersistenceValidator;
+    private final ProductModelValidator productModelValidator;
+    private final ProductPersistenceValidator productPersistenceValidator;
     private final ModelMappers modelMapper;
     private final CustomerOrderRepository customerOrderRepository;
 
 
-    public BasicOperationCustomerOrder(
+    public CustomerOrderService(
             ProductRepository productRepository,
             CustomerRepository customerRepository,
             ProducerRepository producerRepository,
-            PaymentRepository paymentRepository,
-            ManagmentProductsValidator managmentProductsValidator,
+            CustomerModelValidator customerModelValidator,
+            CustomerPersistenceValidator customerPersistenceValidator,
+            CustomerOrderModelValidator customerOrderModelValidator,
+            CustomerOrderPersistenceValidator customerOrderPersistenceValidator,
+            ProductModelValidator productModelValidator,
+            ProductPersistenceValidator productPersistenceValidator,
             ModelMappers modelMapper,
             CustomerOrderRepository customerOrderRepository
     ) {
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
         this.producerRepository = producerRepository;
-        this.paymentRepository = paymentRepository;
-        this.managmentProductsValidator = managmentProductsValidator;
+        this.customerModelValidator = customerModelValidator;
+        this.customerPersistenceValidator = customerPersistenceValidator;
+        this.customerOrderModelValidator = customerOrderModelValidator;
+        this.customerOrderPersistenceValidator = customerOrderPersistenceValidator;
+        this.productModelValidator = productModelValidator;
+        this.productPersistenceValidator = productPersistenceValidator;
         this.modelMapper = modelMapper;
         this.customerOrderRepository = customerOrderRepository;
     }
@@ -42,11 +59,11 @@ public class BasicOperationCustomerOrder {
             throw new MyException(ExceptionCode.CUSTOMER_ORDER, "CUSTOMER_ORDER OBJECT IS NULL");
         }
 
-        if (!managmentProductsValidator.validateCustomerOrderFields(customerOrderDto)) {
+        if (!customerOrderModelValidator.validateCustomerOrderFields(customerOrderDto)) {
             throw new MyException(ExceptionCode.CUSTOMER_ORDER, "CUSTOMER_ORDER FIELDS ARE NOT VALID");
         }
 
-        if (managmentProductsValidator.validaterCustomerOrderInsideDB(customerOrderDto)) {
+        if (customerOrderPersistenceValidator.validaterCustomerOrderInsideDB(customerOrderDto)) {
             throw new MyException(ExceptionCode.CUSTOMER_ORDER, "CUSTOMER_ORDER ALREADY EXISTS");
         }
 
@@ -68,31 +85,12 @@ public class BasicOperationCustomerOrder {
             throw new MyException(ExceptionCode.PRODUCT, "PRODUCT WITHOUT ID AND NAME");
         }
 
-        if (!managmentProductsValidator.validateProductFields(productDto)) {
+        if (!productModelValidator.validateProductFields(productDto)) {
             throw new MyException(ExceptionCode.PRODUCT, "PRODUCT FIELDS ARE NOT VALID");
         }
 
-        if (!managmentProductsValidator.validateProductInsideDB(productDto)) {
+        if (!productPersistenceValidator.validateProductInsideDB(productDto)) {
             throw new MyException(ExceptionCode.PRODUCT, "PRODUCT NOT FOUND");
-        }
-
-        // -----------------------------------------------------------------------------------
-        // ------------------------------- PAYMENT VALIDATION --------------------------------
-        // -----------------------------------------------------------------------------------
-
-        PaymentDto paymentDto = customerOrderDto.getPaymentDto();
-
-        if (paymentDto == null) {
-            throw new MyException(ExceptionCode.PAYMENT, "PAYMENT OBJECT IS NULL");
-        }
-
-        if (paymentDto.getId() == null && paymentDto.getEpayment() == null) {
-            throw new MyException(ExceptionCode.PAYMENT, "PAYMENT WITHOUT ID AND NAME");
-        }
-
-
-        if (!managmentProductsValidator.validatePaymentInsideDB(paymentDto)) {
-            throw new MyException(ExceptionCode.PAYMENT, "PAYMENT NOT FOUND");
         }
 
 
@@ -110,11 +108,11 @@ public class BasicOperationCustomerOrder {
             throw new MyException(ExceptionCode.CUSTOMER, "CUSTOMER WITHOUT ID AND NAME");
         }
 
-        if (!managmentProductsValidator.validateCustomerFields(customerDto)) {
+        if (!customerModelValidator.validateCustomerFields(customerDto)) {
             throw new MyException(ExceptionCode.CUSTOMER, "CUSTOMER FIELDS ARE NOT VALID");
         }
 
-        if (!managmentProductsValidator.validateCustomerInsideDB(customerDto)) {
+        if (!customerPersistenceValidator.validateCustomerInsideDB(customerDto)) {
             throw new MyException(ExceptionCode.CUSTOMER, "CUSTOMER NOT FOUND");
         }
 
@@ -151,25 +149,8 @@ public class BasicOperationCustomerOrder {
                     .orElseThrow(() -> new MyException(ExceptionCode.PRODUCT, "PRODUCT WITH GIVEN ID AND NAME NOT FOUND"));
         }
 
-
-        Payment payment = null;
-
-        if (payment.getId() != null) {
-            payment = paymentRepository
-                    .findOne(payment.getId())
-                    .orElse(null);
-        }
-
-        if (payment == null) {
-            payment = paymentRepository
-                    .findByName(customerOrderDto.getPaymentDto().getEpayment())
-                    .orElseThrow(() -> new MyException(ExceptionCode.PAYMENT, "PAYMENT WITH GIVEN ID AND NAME NOT FOUND"));
-        }
-
-
         customerOrder.setCustomer(customer);
         customerOrder.setProduct(product);
-        customerOrder.setPayment(payment);
         customerOrderRepository.saveOrUpdate(customerOrder);
 
     }

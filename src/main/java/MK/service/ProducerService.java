@@ -8,35 +8,45 @@ import MK.exceptions.ExceptionCode;
 import MK.exceptions.MyException;
 import MK.mappers.ModelMappers;
 import MK.model.Country;
-import MK.model.Customer;
 import MK.model.Producer;
 import MK.model.Trade;
 import MK.repository.impl.CountryRepository;
 import MK.repository.impl.ProducerRepository;
 import MK.repository.impl.TradeRepository;
-import MK.validator.ManagmentProductsValidator;
+import MK.validator.impl.model.CountryModelValidator;
+import MK.validator.impl.model.ProducerModelValidator;
+import MK.validator.impl.model.TradeModelValidator;
+import MK.validator.impl.persistence.ProducerPersistenceValidator;
 
-public class BasicOperationProducer {
+public class ProducerService {
 
 
     private final ProducerRepository producerRepository;
     private final CountryRepository countryRepository;
     private final TradeRepository tradeRepository;
-    private final ManagmentProductsValidator managmentProductsValidator;
+    private final TradeModelValidator tradeModelValidator;
+    private final CountryModelValidator countryModelValidator;
+    private final ProducerModelValidator producerModelValidator;
+    private final ProducerPersistenceValidator producerPersistenceValidator;
     private final ModelMappers modelMapper;
 
 
-    public BasicOperationProducer(
+    public ProducerService(
             ProducerRepository producerRepository,
             CountryRepository countryRepository,
             TradeRepository tradeRepository,
-            ManagmentProductsValidator managmentProductsValidator,
-            ModelMappers modelMapper)
-    {
+            TradeModelValidator tradeModelValidator,
+            ProducerModelValidator producerModelValidator,
+            ProducerPersistenceValidator producerPersistenceValidator,
+            CountryModelValidator countryModelValidator,
+            ModelMappers modelMapper) {
         this.producerRepository = producerRepository;
-        this.countryRepository= countryRepository;
+        this.countryRepository = countryRepository;
         this.tradeRepository = tradeRepository;
-        this.managmentProductsValidator = managmentProductsValidator;
+        this.tradeModelValidator = tradeModelValidator;
+        this.producerModelValidator = producerModelValidator;
+        this.producerPersistenceValidator = producerPersistenceValidator;
+        this.countryModelValidator = countryModelValidator;
         this.modelMapper = modelMapper;
     }
 
@@ -46,11 +56,11 @@ public class BasicOperationProducer {
             throw new MyException(ExceptionCode.PRODUCER, "PRODUCER OBJECT IS NULL");
         }
 
-        if (!managmentProductsValidator.validateProducerFields(producerDto)) {
+        if (!producerModelValidator.validateProducerFields(producerDto)) {
             throw new MyException(ExceptionCode.PRODUCER, "PRODUCER FIELDS ARE NOT VALID");
         }
 
-        if (managmentProductsValidator.validateProducerInsideDB(producerDto)) {
+        if (producerPersistenceValidator.validateProducerInsideDB(producerDto)) {
             throw new MyException(ExceptionCode.PRODUCER, "PRODUCER ALREADY EXISTS");
         }
 
@@ -71,15 +81,9 @@ public class BasicOperationProducer {
             throw new MyException(ExceptionCode.CUSTOMER, "COUNTRY WITHOUT ID AND NAME");
         }
 
-        if (!managmentProductsValidator.validateCountryFields(countryDto)) {
+        if (!countryModelValidator.validateCountryFields(countryDto)) {
             throw new MyException(ExceptionCode.COUNTRY, "COUNTRY FIELDS ARE NOT VALID");
         }
-
-        if (!managmentProductsValidator.validateCountryInsideDB(countryDto)) {
-            throw new MyException(ExceptionCode.COUNTRY, "COUNTRY NOT FOUND");
-        }
-
-
 
 
 
@@ -94,14 +98,9 @@ public class BasicOperationProducer {
             throw new MyException(ExceptionCode.TRADE, "TRADE OBJECT IS NULL");
         }
 
-        if (!managmentProductsValidator.validateTradeFields(tradeDto)) {
+        if (!tradeModelValidator.validateTradeFields(tradeDto)) {
             throw new MyException(ExceptionCode.TRADE, "TRADE FIELDS ARE NOT VALID");
         }
-
-        if (managmentProductsValidator.validateTradeInsideDB(tradeDto)) {
-            throw new MyException(ExceptionCode.TRADE, "TRADE ALREADY EXISTS");
-        }
-
 
 
         // -----------------------------------------------------------------------------------
@@ -123,7 +122,6 @@ public class BasicOperationProducer {
         }
 
 
-
         Trade trade = null;
 
         if (tradeDto.getId() != null) {
@@ -143,7 +141,7 @@ public class BasicOperationProducer {
         producerRepository.saveOrUpdate(producer);
     }
 
-    }
+}
 
 
 

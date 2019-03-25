@@ -3,7 +3,6 @@ package MK.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.Set;
 
 @Data

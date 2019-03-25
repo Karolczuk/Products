@@ -1,12 +1,12 @@
 package MK.dto;
 
+import MK.model.EPayment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -20,5 +20,6 @@ public class CustomerOrderDto {
     private LocalDate date;
     private CustomerDto customerDto;
     private ProductDto productDto;
-    private PaymentDto paymentDto;
+    private Set<EPayment> payments;
+
 }

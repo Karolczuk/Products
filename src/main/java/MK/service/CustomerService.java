@@ -8,26 +8,33 @@ import MK.mappers.ModelMappers;
 import MK.model.Country;
 import MK.model.Customer;
 import MK.repository.impl.CountryRepository;
-import MK.repository.impl.CountryRepositoryImpl;
 import MK.repository.impl.CustomerRepository;
-import MK.repository.impl.CustomerRepositoryImpl;
-import MK.validator.ManagmentProductsValidator;
+import MK.validator.impl.model.CountryModelValidator;
+import MK.validator.impl.model.CustomerModelValidator;
+import MK.validator.impl.persistence.CustomerPersistenceValidator;
 
-public class BasicOperation {
+public class CustomerService {
     private final CountryRepository countryRepository/* = new CountryRepositoryImpl()*/;
     private final CustomerRepository customerRepository/* = new CustomerRepositoryImpl()*/;
-    private final ManagmentProductsValidator managmentProductsValidator/* = new ManagmentProductsValidator()*/;
     private final ModelMappers modelMapper/* = new ModelMappers()*/;
+    private final CustomerModelValidator customerModelValidator;
+    private final CountryModelValidator countryModelValidator;
+    private CustomerPersistenceValidator customerPersistenceValidator;
 
-    public BasicOperation(
+    public CustomerService(
             CountryRepository countryRepository,
             CustomerRepository customerRepository,
-            ManagmentProductsValidator managmentProductsValidator,
-            ModelMappers modelMapper) {
+            ModelMappers modelMapper,
+            CustomerModelValidator customerModelValidator,
+            CustomerPersistenceValidator customerPersistenceValidator,
+            CountryModelValidator countryModelValidator) {
         this.countryRepository = countryRepository;
         this.customerRepository = customerRepository;
-        this.managmentProductsValidator = managmentProductsValidator;
         this.modelMapper = modelMapper;
+        this.customerModelValidator = customerModelValidator;
+        this.customerPersistenceValidator = customerPersistenceValidator;
+        this.countryModelValidator = countryModelValidator;
+
     }
 
     public void addCustomer(CustomerDto customerDto) {
@@ -39,11 +46,11 @@ public class BasicOperation {
             throw new MyException(ExceptionCode.CUSTOMER, "CUSTOMER OBJECT IS NULL");
         }
 
-        if (!managmentProductsValidator.validateCustomerFields(customerDto)) {
+        if (!customerModelValidator.validateCustomerFields(customerDto)) {
             throw new MyException(ExceptionCode.CUSTOMER, "CUSTOMER FIELDS ARE NOT VALID");
         }
 
-        if (managmentProductsValidator.validateCustomerInsideDB(customerDto)) {
+        if (customerPersistenceValidator.validateCustomerInsideDB(customerDto)) {
             throw new MyException(ExceptionCode.CUSTOMER, "CUSTOMER ALREADY EXISTS");
         }
 
@@ -61,14 +68,9 @@ public class BasicOperation {
             throw new MyException(ExceptionCode.COUNTRY, "COUNTRY WITHOUT ID AND NAME");
         }
 
-        if (!managmentProductsValidator.validateCountryFields(countryDto)) {
+        if (!countryModelValidator.validateCountryFields(countryDto)) {
             throw new MyException(ExceptionCode.COUNTRY, "COUNTRY FIELDS ARE NOT VALID");
         }
-
-        if (!managmentProductsValidator.validateCountryInsideDB(countryDto)) {
-            throw new MyException(ExceptionCode.COUNTRY, "COUNTRY NOT FOUND");
-        }
-
 
         // -----------------------------------------------------------------------------------
         // ----------------------------------- INSERT INTO DB --------------------------------

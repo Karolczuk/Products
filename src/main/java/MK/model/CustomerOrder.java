@@ -25,9 +25,18 @@ public class CustomerOrder {
     private int quantity;
     private LocalDate date;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "payment_id")
-    private Payment payment;
+//    @ManyToOne(cascade = CascadeType.PERSIST)
+//    @JoinColumn(name = "payment_id")
+//    private Payment payment;
+
+    @ElementCollection
+    @CollectionTable(
+            name = "payments",
+            joinColumns = @JoinColumn(name = "customer_order_id")
+    )
+    @Column(name = "payment")
+    @Enumerated(EnumType.STRING)
+    private Set<EPayment> payments;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")

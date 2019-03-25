@@ -6,20 +6,20 @@ import MK.exceptions.MyException;
 import MK.mappers.ModelMappers;
 import MK.model.Category;
 import MK.repository.impl.CategoryRepository;
-import MK.validator.ManagmentProductsValidator;
+import MK.validator.impl.model.CategoryModelValidator;
 
-public class BasicOperationCategory {
+public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final ManagmentProductsValidator managmentProductsValidator;
+    private final CategoryModelValidator categoryModelValidator;
     private final ModelMappers modelMapper;
 
 
-    public BasicOperationCategory(
+    public CategoryService(
             CategoryRepository categoryRepository,
-            ManagmentProductsValidator managmentProductsValidator,
+            CategoryModelValidator categoryModelValidator,
             ModelMappers modelMapper) {
         this.categoryRepository = categoryRepository;
-        this.managmentProductsValidator = managmentProductsValidator;
+        this.categoryModelValidator = categoryModelValidator;
         this.modelMapper = modelMapper;
     }
 
@@ -29,12 +29,8 @@ public class BasicOperationCategory {
             throw new MyException(ExceptionCode.CATEGORY, "CATEGORY OBJECT IS NULL");
         }
 
-        if (!managmentProductsValidator.validateCategoryFields(categoryDto)) {
+        if (!categoryModelValidator.validateCategoryFields(categoryDto)) {
             throw new MyException(ExceptionCode.CATEGORY, "CATEGORY FIELDS ARE NOT VALID");
-        }
-
-        if (managmentProductsValidator.validateCategoryInsideDB(categoryDto)) {
-            throw new MyException(ExceptionCode.CATEGORY, "CATEGORY ALREADY EXISTS");
         }
 
         Category category = modelMapper.fromCategoryDtoToCategory(categoryDto);

@@ -6,33 +6,45 @@ import MK.exceptions.MyException;
 import MK.mappers.ModelMappers;
 import MK.model.*;
 import MK.repository.impl.CategoryRepository;
-import MK.repository.impl.GuaranteeRepository;
 import MK.repository.impl.ProducerRepository;
 import MK.repository.impl.ProductRepository;
-import MK.validator.ManagmentProductsValidator;
+import MK.validator.impl.model.CategoryModelValidator;
+import MK.validator.impl.model.ProducerModelValidator;
+import MK.validator.impl.model.ProductModelValidator;
+import MK.validator.impl.persistence.ProducerPersistenceValidator;
+import MK.validator.impl.persistence.ProductPersistenceValidator;
 
 
-public class BasicOperationProduct {
+public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProducerRepository producerRepository;
-    private final GuaranteeRepository guaranteeRepository;
-    private final ManagmentProductsValidator managmentProductsValidator;
+    private final ProductModelValidator productModelValidator;
+    private final ProductPersistenceValidator productPersistenceValidator;
+    private final ProducerModelValidator producerModelValidator;
+    private final ProducerPersistenceValidator producerPersistenceValidator;
+    private final CategoryModelValidator categoryModelValidator;
     private final ModelMappers modelMapper;
 
 
-    public BasicOperationProduct(
+    public ProductService(
             ProductRepository productRepository,
             CategoryRepository categoryRepository,
             ProducerRepository producerRepository,
-            GuaranteeRepository guaranteeRepository,
-            ManagmentProductsValidator managmentProductsValidator,
+            ProductModelValidator productModelValidator,
+            ProductPersistenceValidator productPersistenceValidator,
+            ProducerModelValidator producerModelValidator,
+            ProducerPersistenceValidator producerPersistenceValidator,
+            CategoryModelValidator categoryModelValidator,
             ModelMappers modelMapper) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.producerRepository = producerRepository;
-        this.guaranteeRepository = guaranteeRepository;
-        this.managmentProductsValidator = managmentProductsValidator;
+        this.productModelValidator = productModelValidator;
+        this.producerModelValidator = producerModelValidator;
+        this.productPersistenceValidator = productPersistenceValidator;
+        this.producerPersistenceValidator = producerPersistenceValidator;
+        this.categoryModelValidator = categoryModelValidator;
         this.modelMapper = modelMapper;
     }
 
@@ -42,11 +54,11 @@ public class BasicOperationProduct {
             throw new MyException(ExceptionCode.PRODUCT, "PRODUCT OBJECT IS NULL");
         }
 
-        if (!managmentProductsValidator.validateProductFields(productDto)) {
+        if (!productModelValidator.validateProductFields(productDto)) {
             throw new MyException(ExceptionCode.PRODUCT, "PRODUCT FIELDS ARE NOT VALID");
         }
 
-        if (managmentProductsValidator.validateProductInsideDB(productDto)) {
+        if (productPersistenceValidator.validateProductInsideDB(productDto)) {
             throw new MyException(ExceptionCode.PRODUCT, "PRODUCT ALREADY EXISTS");
         }
 
@@ -67,13 +79,10 @@ public class BasicOperationProduct {
             throw new MyException(ExceptionCode.CATEGORY, "CATEGORY WITHOUT ID AND NAME");
         }
 
-        if (!managmentProductsValidator.validateCategoryFields(categoryDto)) {
+        if (!categoryModelValidator.validateCategoryFields(categoryDto)) {
             throw new MyException(ExceptionCode.CATEGORY, "CATEGORY FIELDS ARE NOT VALID");
         }
 
-        if (!managmentProductsValidator.validateCategoryInsideDB(categoryDto)) {
-            throw new MyException(ExceptionCode.CATEGORY, "CATEGORY NOT FOUND");
-        }
 
         // -----------------------------------------------------------------------------------
         // ------------------------------- PRODUCER VALIDATION --------------------------------
@@ -89,32 +98,17 @@ public class BasicOperationProduct {
             throw new MyException(ExceptionCode.PRODUCER, "PRODUCER WITHOUT ID AND NAME");
         }
 
-        if (!managmentProductsValidator.validateProducerFields(producerDto)) {
+        if (!producerModelValidator.validateProducerFields(producerDto)) {
             throw new MyException(ExceptionCode.PRODUCER, "PRODUCER FIELDS ARE NOT VALID");
         }
 
-        if (!managmentProductsValidator.validateProducerInsideDB(producerDto)) {
+        if (!producerPersistenceValidator.validateProducerInsideDB(producerDto)) {
             throw new MyException(ExceptionCode.PRODUCER, "PRODUCER NOT FOUND");
         }
 
-        // -----------------------------------------------------------------------------------
-        // ------------------------------- GUARANTEE VALIDATION --------------------------------
-        // -----------------------------------------------------------------------------------
-
-        GuaranteeComponentsDto guaranteeComponentsDto = productDto.getGuarnteeComponentsDto();
-
-        if (guaranteeComponentsDto == null) {
-            throw new MyException(ExceptionCode.GUARANTEECOMPONENTS, "GUARANTEE_COMPONENTS OBJECT IS NULL");
-        }
-
-        if (guaranteeComponentsDto.getId() == null && guaranteeComponentsDto.getEGuarantee() == null) {
-            throw new MyException(ExceptionCode.GUARANTEECOMPONENTS, "GUARANTEE_COMPONENTS WITHOUT ID AND NAME");
-        }
 
 
-        if (!managmentProductsValidator.validateGuaranteeInsideDB(guaranteeComponentsDto)) {
-            throw new MyException(ExceptionCode.GUARANTEECOMPONENTS, "GUARANTEE_COMPONENTS NOT FOUND");
-        }
+
         // -----------------------------------------------------------------------------------
         // ----------------------------------- INSERT INTO DB --------------------------------
         // -----------------------------------------------------------------------------------
@@ -150,31 +144,9 @@ public class BasicOperationProduct {
         }
 
 
-
-        GuaranteeComponents guaranteeComponents = null;
-
-        if (guaranteeComponentsDto.getId() != null) {
-            guaranteeComponents = guaranteeRepository
-                    .findOne(guaranteeComponents.getId())
-                    .orElse(null);
-        }
-
-        if (guaranteeComponents== null) {
-            guaranteeComponents = guaranteeRepository
-                    .findByName(productDto.getGuarnteeComponentsDto().getEGuarantee())
-                    .orElseThrow(() -> new MyException(ExceptionCode.GUARANTEECOMPONENTS, "GUARANTEE_COMPONENTS WITH GIVEN ID AND NAME NOT FOUND"));
-        }
-
-        System.out.println("-----------------------------------------------------");
-        System.out.println("-----------------------------------------------------");
-        System.out.println("-----------------------------------------------------");
-        System.out.println("-----------------------------------------------------");
-        System.out.println(category);
-        System.out.println(producer);
-        System.out.println(guaranteeComponents);
         product.setCategory(category);
         product.setProducer(producer);
-        product.setGuaranteeComponents(guaranteeComponents);
+
         productRepository.saveOrUpdate(product);
     }
 

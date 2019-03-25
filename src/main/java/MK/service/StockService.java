@@ -10,27 +10,47 @@ import MK.model.*;
 import MK.repository.impl.ProductRepository;
 import MK.repository.impl.ShopRepository;
 import MK.repository.impl.StockRepository;
-import MK.validator.ManagmentProductsValidator;
+import MK.validator.impl.model.ProductModelValidator;
+import MK.validator.impl.model.ShopModelValidator;
+import MK.validator.impl.model.StockModelValidator;
+import MK.validator.impl.persistence.ProductPersistenceValidator;
+import MK.validator.impl.persistence.ShopPersistenceValidator;
+import MK.validator.impl.persistence.StockPersistanceValidator;
 
-public class BasicOperationStock {
+public class StockService {
 
     private final StockRepository stockRepository;
     private final ShopRepository shopRepository;
     private final ProductRepository productRepository;
-    private final ManagmentProductsValidator managmentProductsValidator;
+    private final StockModelValidator stockModelValidator;
+    private final StockPersistanceValidator stockPersistanceValidator;
+    private final ShopModelValidator shopModelValidator;
+    private final ShopPersistenceValidator shopPersistenceValidator;
+    private final ProductModelValidator productModelValidator;
+    private final ProductPersistenceValidator productPersistenceValidator;
     private final ModelMappers modelMapper;
 
 
-    public BasicOperationStock(
+    public StockService(
             StockRepository stockRepository,
             ShopRepository shopRepository,
             ProductRepository productRepository,
-            ManagmentProductsValidator managmentProductsValidator,
+            StockModelValidator stockModelValidator,
+            StockPersistanceValidator stockPersistanceValidator,
+            ShopModelValidator shopModelValidator,
+            ShopPersistenceValidator shopPersistenceValidator,
+            ProductModelValidator productModelValidator,
+            ProductPersistenceValidator productPersistenceValidator,
             ModelMappers modelMapper) {
         this.stockRepository = stockRepository;
         this.shopRepository = shopRepository;
         this.productRepository = productRepository;
-        this.managmentProductsValidator = managmentProductsValidator;
+        this.stockModelValidator = stockModelValidator;
+        this.stockPersistanceValidator = stockPersistanceValidator;
+        this.shopModelValidator = shopModelValidator;
+        this.shopPersistenceValidator = shopPersistenceValidator;
+        this.productModelValidator = productModelValidator;
+        this.productPersistenceValidator = productPersistenceValidator;
         this.modelMapper = modelMapper;
     }
 
@@ -41,12 +61,12 @@ public class BasicOperationStock {
             throw new MyException(ExceptionCode.STOCK, "STOCK OBJECT IS NULL");
         }
 
-        if (!managmentProductsValidator.validateStockFields(stockDto)) {
+        if (!stockModelValidator.validateStockFields(stockDto)) {
             stockDto.setQuantty(stockDto.getQuantty() + 1);
-//            throw new MyException(ExceptionCode.STOCK, "STOCK FIELDS ARE NOT VALID");
+           throw new MyException(ExceptionCode.STOCK, "STOCK FIELDS ARE NOT VALID");
         }
 
-        if (managmentProductsValidator.validateStockInsideDB(stockDto)) {
+        if (stockPersistanceValidator.validateStockInsideDB(stockDto)) {
             throw new MyException(ExceptionCode.STOCK, "STOCK ALREADY EXISTS");
         }
 
@@ -65,11 +85,11 @@ public class BasicOperationStock {
             throw new MyException(ExceptionCode.SHOP, "SHOP WITHOUT ID AND NAME");
         }
 
-        if (!managmentProductsValidator.validateShopFields(shopDto)) {
+        if (!shopModelValidator.validateShopFields(shopDto)) {
             throw new MyException(ExceptionCode.SHOP, "SHOP FIELDS ARE NOT VALID");
         }
 
-        if (!managmentProductsValidator.validateShopInsideDB(shopDto)) {
+        if (!shopPersistenceValidator.validateShopInsideDB(shopDto)) {
             throw new MyException(ExceptionCode.SHOP, "SHOP NOT FOUND");
         }
 
@@ -88,11 +108,11 @@ public class BasicOperationStock {
             throw new MyException(ExceptionCode.PRODUCT, "PRODUCT WITHOUT ID AND NAME");
         }
 
-        if (!managmentProductsValidator.validateProductFields(productDto)) {
+        if (!productModelValidator.validateProductFields(productDto)) {
             throw new MyException(ExceptionCode.PRODUCT, "PRODUCT FIELDS ARE NOT VALID");
         }
 
-        if (!managmentProductsValidator.validateProductInsideDB(productDto)) {
+        if (!productPersistenceValidator.validateProductInsideDB(productDto)) {
             throw new MyException(ExceptionCode.PRODUCT, "PRODUCT NOT FOUND");
         }
 
@@ -122,14 +142,13 @@ public class BasicOperationStock {
 
         if (productDto.getId() != null) {
             product = productRepository
-                    .findOne(productDto.getId())
+                    .findByName(productDto.getName())
                     .orElse(null);
         }
 
-
         if (product == null) {
             product = productRepository
-                    .findByNameCategoryProducer(productDto.getName(), product.getCategory().getName(), productDto.getProducerDto().getName())
+                    .findByNameCategoryProducer(productDto.getName(), productDto.getCategoryDto().getName(), productDto.getProducerDto().getName())
                     .orElseThrow(() -> new MyException(ExceptionCode.COUNTRY, "COUNTRY WITH GIVEN ID AND NAME NOT FOUND"));
         }
 

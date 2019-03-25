@@ -3,7 +3,6 @@ package MK.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.Set;
 
 @Data
@@ -17,6 +16,8 @@ public class Category {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "category")

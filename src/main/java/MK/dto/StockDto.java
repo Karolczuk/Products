@@ -1,12 +1,10 @@
 package MK.dto;
 
-import MK.model.Producer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigInteger;
 
 @Data
 @AllArgsConstructor

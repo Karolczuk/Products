@@ -37,4 +37,32 @@ public class ProductRepositoryImpl extends AbstractGenericRepository<Product> im
         }
         return product;
     }
+
+    @Override
+    public Optional<Product> findByName(String name) {
+        Optional<Product> product = Optional.empty();
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        try {
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            product = em
+                    .createQuery("select p from Product p where p.name = :name", Product.class)
+                    .setParameter("name", name)
+                    .getResultList().stream().findFirst();
+
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MyException(ExceptionCode.PRODUCT, e.getMessage());
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return product;
+
+
+    }
 }

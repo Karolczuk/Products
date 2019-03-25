@@ -1,6 +1,5 @@
 package MK.service;
 
-import MK.dto.CountryDto;
 import MK.dto.TradeDto;
 import MK.exceptions.ExceptionCode;
 import MK.exceptions.MyException;
@@ -11,21 +10,21 @@ import MK.repository.impl.CountryRepository;
 import MK.repository.impl.CustomerRepository;
 import MK.repository.impl.TradeRepository;
 import MK.repository.impl.TradeRepositoryImpl;
-import MK.validator.ManagmentProductsValidator;
+import MK.validator.impl.model.TradeModelValidator;
 
-public class BasicOperationTrade {
+public class TradeService {
 
     private final TradeRepository tradeRepository;
-    private final ManagmentProductsValidator managmentProductsValidator;
+    private final TradeModelValidator tradeModelValidator;
     private final ModelMappers modelMapper;
 
 
-    public BasicOperationTrade(
+    public TradeService(
             TradeRepository tradeRepository,
-            ManagmentProductsValidator managmentProductsValidator,
+            TradeModelValidator tradeModelValidator,
             ModelMappers modelMapper) {
         this.tradeRepository = tradeRepository;
-        this.managmentProductsValidator = managmentProductsValidator;
+        this.tradeModelValidator = tradeModelValidator;
         this.modelMapper = modelMapper;
     }
 
@@ -35,12 +34,8 @@ public class BasicOperationTrade {
             throw new MyException(ExceptionCode.TRADE, "TRADE OBJECT IS NULL");
         }
 
-        if (!managmentProductsValidator.validateTradeFields(tradeDto)) {
+        if (!tradeModelValidator.validateTradeFields(tradeDto)) {
             throw new MyException(ExceptionCode.TRADE, "TRADE FIELDS ARE NOT VALID");
-        }
-
-        if (managmentProductsValidator.validateTradeInsideDB(tradeDto)) {
-            throw new MyException(ExceptionCode.TRADE, "TRADE ALREADY EXISTS");
         }
 
         Trade trade = modelMapper.fromTradeDtoToTrade(tradeDto);
