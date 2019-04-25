@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class StockDto {
     private Long id;
-    private Integer quantty;
+    private Integer quantity;
     private ShopDto shopDto;
     private ProductDto productDto;
 }

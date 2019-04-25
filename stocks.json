@@ -1,0 +1,27 @@
+[
+  {
+    "quantity" : 2,
+    "productDto": {
+      "name": "CHEESE",
+      "price": "23.21",
+      "categoryDto": {
+        "name": "A"
+      },
+      "producerDto": {
+        "name": "SARA",
+        "countryDto": {
+          "name": "POLAND"
+        },
+        "tradeDto": {
+          "name": "FOOD"
+        }
+      }
+    },
+    "shopDto": {
+      "name": "LIDL",
+      "countryDto": {
+        "name": "POLAND"
+      }
+    }
+  }
+]

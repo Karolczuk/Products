@@ -1,0 +1,21 @@
+[
+  {
+
+    "name": "SARA",
+    "countryDto": {
+      "name": "POLAND"
+    },
+    "tradeDto": {
+      "name": "FOOD"
+    }
+  },
+  {
+    "name": "ANTONI",
+    "countryDto": {
+      "name": "POLAND"
+    },
+    "tradeDto": {
+      "name": "FOOD"
+    }
+  }
+]

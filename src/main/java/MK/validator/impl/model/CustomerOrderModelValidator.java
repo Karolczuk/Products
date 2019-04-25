@@ -3,6 +3,7 @@ package MK.validator.impl.model;
 import MK.dto.CustomerOrderDto;
 import MK.validator.Validator;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +17,8 @@ public class CustomerOrderModelValidator implements Validator<CustomerOrderDto> 
 
         return customerOrderDto.getDate().equals(LocalDate.now()) ||
                 customerOrderDto.getDate().isAfter(LocalDate.now()) &&
-                        customerOrderDto.getDiscount() >= 0 &&
-                        customerOrderDto.getDiscount() <= 1;
+                        customerOrderDto.getDiscount().compareTo(BigDecimal.ZERO) > 0 &&
+                        customerOrderDto.getDiscount().compareTo(new BigDecimal(1)) < 1;
     }
 
     @Override

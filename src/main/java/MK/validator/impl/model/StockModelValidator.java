@@ -12,7 +12,7 @@ public class StockModelValidator implements Validator<StockDto> {
 
 
     public boolean validateStockFields(StockDto stockDto) {
-        return stockDto.getQuantty() >= 0;
+        return stockDto.getQuantity() >= 0;
     }
 
 

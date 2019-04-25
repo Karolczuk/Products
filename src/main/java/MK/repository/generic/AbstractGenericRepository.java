@@ -18,9 +18,7 @@ public abstract class AbstractGenericRepository<T> implements GenericRepository<
 
     @Override
     public T saveOrUpdate(T t) {
-        //Session session = null;
         EntityManager em = null;
-        //Transaction tx = null;
         EntityTransaction tx = null;
         T item = null;
         try {
@@ -86,6 +84,7 @@ public abstract class AbstractGenericRepository<T> implements GenericRepository<
             }
             tx.commit();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new MyException(ExceptionCode.CUSTOMER, e.getMessage());
         } finally {
             if (em != null) {

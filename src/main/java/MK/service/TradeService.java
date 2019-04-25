@@ -41,7 +41,5 @@ public class TradeService {
         Trade trade = modelMapper.fromTradeDtoToTrade(tradeDto);
 
         tradeRepository.saveOrUpdate(trade);
-
-
     }
 }

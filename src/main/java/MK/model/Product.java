@@ -20,7 +20,7 @@ public class Product {
     private String name;
     private BigDecimal price;
 
-
+    @ToString.Exclude
     @ElementCollection
     @CollectionTable(
             name = "guarantees",

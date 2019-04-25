@@ -19,13 +19,15 @@ public class Customer {
     private Integer age;
     private String name;
     private String surname;
+    @Transient
+    private Long countProductByCountry;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "country_id")
     private Country country;
 
 
-    @OneToMany( mappedBy = "customer")
+    @OneToMany( mappedBy = "customer", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<CustomerOrder> customerOrders;

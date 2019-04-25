@@ -11,7 +11,9 @@ import MK.repository.impl.ShopRepository;
 import MK.validator.impl.model.CountryModelValidator;
 import MK.validator.impl.model.ShopModelValidator;
 import MK.validator.impl.persistence.ShopPersistenceValidator;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ShopService {
 
     private final ShopRepository shopRepository;
@@ -20,7 +22,6 @@ public class ShopService {
     private final ShopPersistenceValidator shopPersistenceValidator;
     private final CountryModelValidator countryModelValidator;
     private final ModelMappers modelMapper;
-
 
     public ShopService(
             ShopRepository shopRepository,

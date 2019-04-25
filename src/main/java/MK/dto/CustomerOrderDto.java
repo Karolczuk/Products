@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -13,9 +15,9 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class CustomerOrderDto {
-    private Long id; // d
+    private Long id;
     private String name;
-    private double discount;
+    private BigDecimal discount;
     private int quantity;
     private LocalDate date;
     private CustomerDto customerDto;

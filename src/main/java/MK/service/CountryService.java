@@ -7,21 +7,14 @@ import MK.mappers.ModelMappers;
 import MK.model.Country;
 import MK.repository.impl.CountryRepository;
 import MK.validator.impl.model.CountryModelValidator;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class CountryService {
+
     private final CountryRepository countryRepository;
     private final CountryModelValidator countryModelValidator;
     private final ModelMappers modelMapper;
-
-
-    public CountryService(
-            CountryRepository countryRepository,
-            CountryModelValidator countryModelValidator,
-            ModelMappers modelMapper) {
-        this.countryRepository = countryRepository;
-        this.countryModelValidator = countryModelValidator;
-        this.modelMapper = modelMapper;
-    }
 
     public void addCountry(CountryDto countryDto) {
 

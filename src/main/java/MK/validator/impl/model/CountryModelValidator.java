@@ -1,14 +1,10 @@
 package MK.validator.impl.model;
 
 import MK.dto.CountryDto;
-import MK.model.Country;
 import MK.validator.Validator;
-
 import java.util.HashMap;
 import java.util.Map;
 
-// w tej klasie skupiasz sie na walidacji modelu czyli
-// czy nazwa z duzej litery itd
 public class CountryModelValidator implements Validator<CountryDto> {
 
 

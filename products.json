@@ -1,0 +1,34 @@
+[
+  {
+    "name": "CHEESE",
+    "price": "23.21",
+    "categoryDto": {
+      "name": "A"
+    },
+    "producerDto": {
+      "name": "SARA",
+      "countryDto": {
+        "name": "POLAND"
+      },
+      "tradeDto": {
+        "name": "FOOD"
+      }
+    }
+  },
+  {
+    "name": "JEANSE",
+    "price": "213.12",
+    "categoryDto": {
+      "name": "B"
+    },
+    "producerDto": {
+      "name": "SARA",
+      "countryDto": {
+        "name": "POLAND"
+      },
+      "tradeDto": {
+        "name": "FOOD"
+      }
+    }
+  }
+]

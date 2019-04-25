@@ -62,7 +62,7 @@ public class StockService {
         }
 
         if (!stockModelValidator.validateStockFields(stockDto)) {
-            stockDto.setQuantty(stockDto.getQuantty() + 1);
+            stockDto.setQuantity(stockDto.getQuantity() + 1);
            throw new MyException(ExceptionCode.STOCK, "STOCK FIELDS ARE NOT VALID");
         }
 

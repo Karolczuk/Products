@@ -5,8 +5,6 @@ import MK.exceptions.ExceptionCode;
 import MK.exceptions.MyException;
 import MK.model.Country;
 import MK.repository.generic.AbstractGenericRepository;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;

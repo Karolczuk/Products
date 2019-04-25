@@ -16,19 +16,15 @@ import java.util.Set;
 @Table(name = "customer_order")
 public class CustomerOrder {
 
-
     @Id
     @GeneratedValue
     private Long id;
     private String name;
-    private double discount;
+    private BigDecimal discount;
     private int quantity;
     private LocalDate date;
 
-//    @ManyToOne(cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "payment_id")
-//    private Payment payment;
-
+    @ToString.Exclude
     @ElementCollection
     @CollectionTable(
             name = "payments",

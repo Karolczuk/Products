@@ -1,8 +1,6 @@
     package MK.mappers;
-
     import MK.dto.*;
     import MK.model.*;
-
     import java.util.HashSet;
 
     public class ModelMappers {
@@ -165,7 +163,7 @@
         public StockDto fromStockToStockDto(Stock stock) {
             return stock == null ? null : StockDto.builder()
                     .id(stock.getId())
-                    .quantty(stock.getQuantity())
+                    .quantity(stock.getQuantity())
                     .productDto(stock.getProduct() == null ? null : fromProductToProductDto(stock.getProduct()))
                     .shopDto(stock.getShop() == null ? null : fromShopToShopDto(stock.getShop()))
                     .build();
@@ -176,9 +174,8 @@
                     .id(stockDto.getId())
                     .product(stockDto.getProductDto() == null ? null : fromProductDtoToProduct(stockDto.getProductDto()))
                     .shop(stockDto.getShopDto() == null ? null : fromShopDtoToShop(stockDto.getShopDto()))
-                    .quantity(stockDto.getQuantty())
+                    .quantity(stockDto.getQuantity())
                     .build();
         }
-
 
     }

@@ -1,0 +1,18 @@
+[
+  {
+    "age": 18,
+    "name": "MAREK",
+    "surname": "NOWAK",
+    "countryDto": {
+      "name": "SPAIN"
+    }
+  },
+  {
+    "age": 28,
+    "name": "ALA",
+    "surname": "NOWA",
+    "countryDto": {
+      "name": "POLAND"
+    }
+  }
+]

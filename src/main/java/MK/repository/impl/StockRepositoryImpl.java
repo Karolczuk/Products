@@ -41,5 +41,6 @@ public class StockRepositoryImpl  extends AbstractGenericRepository<Stock> imple
         }
         return stock;
     }
+
     }
 
